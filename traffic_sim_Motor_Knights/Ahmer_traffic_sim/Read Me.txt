@@ -1,0 +1,15 @@
+Module Name: traffic_sim_1_rule
+
+Where it does:
+
+Single-car releases are enforced per movement: the controller only lets one car with a given (direction, reported_intent) enter at a time, with a time headway. Queueing is keyed by reported intent, and cars follow their true path geometry—so crashes arise specifically when a liar’s true movement conflicts with the phase’s safe set. That matches your “logic correctness” focus.
+
+What’s missing for the study:
+
+Fixed-phase experiments: the module re-optimizes phases every PHASE_DURATION; you need the ability to hold a chosen phase constant while you inject a lie type.
+Systematic trial injection: only two ad‑hoc scenarios (keys 1 and 2) are implemented; you need a harness to iterate all (direction × lie type) combinations.
+Metrics: it doesn’t record which movements conflicted, liar “safe but wasteful” passages, or honest-car extra wait time.
+
+What needs to be fixed:
+
+One turn arc (W left to N) is incorrectly parameterized, and the constant lane_shift across the whole path misaligns exit lanes after turning. Either can cause spurious collisions even without lies, which undermines the clean logic test.
